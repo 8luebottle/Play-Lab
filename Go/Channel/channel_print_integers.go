@@ -8,15 +8,18 @@ func main() {
 	a := 4
 	b := 5
 
-	cIn := make(chan int, 2)
-	cIn <- a
-	cIn <- b
+	cIn := make(chan int, 2)  // Channel by default is pointer
+	
+	// Write data (channel <-) to the Channel cIn == push to channel
+	cIn <- a               
+	cIn <- b                  
 
 	getChan(cIn)
 }
 
 func getChan(in chan int) {
 	for i := 0; i < 2; i++ {
+		// Read data (<- channel) == pop from channel
 		out := <- in
 		printer(in, out)
 	}
