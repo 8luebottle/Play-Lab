@@ -8,7 +8,7 @@ func main() {
 	a := 4
 	b := 5
 
-	cIn := make(chan int, 2) // 2 생성
+	cIn := make(chan int, 2)
 	cIn <- a
 	cIn <- b
 
