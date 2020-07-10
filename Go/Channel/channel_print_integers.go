@@ -18,7 +18,7 @@ func main() {
 }
 
 func getChan(in chan int) {
-	for i := 0; i < 2; i++ {
+	for i := 0; i <= len(in); i++ {
 		// Read data (<- channel) == pop from channel
 		out := <- in
 		printer(in, out)
