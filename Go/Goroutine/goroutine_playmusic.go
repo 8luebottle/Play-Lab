@@ -36,6 +36,8 @@ func soundWave(s string) {
 	wg.Done()              // Done --> indicate to the WaitGroup that you've exited
 }
 
+// playMusic() == playMusic2()
+// see playMusic2 below
 func playMusic() {
 	wg.Add(1)              // Add  --> indicate the 1 goroutine is begining
 	go soundWave(wave1)
@@ -50,6 +52,16 @@ func playMusic() {
 	wg.Add(1)
 	go soundWave(wave6)
 }
+
+// func playMusic2() {
+// 	wg.Add(6)
+// 	go soundWave(wave1)
+// 	go soundWave(wave2)
+// 	go soundWave(wave3)
+// 	go soundWave(wave4)
+// 	go soundWave(wave5)
+// 	go soundWave(wave6)
+// }
 
 func main() {
 	playMusic()
