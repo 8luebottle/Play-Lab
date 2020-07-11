@@ -26,14 +26,14 @@ func producer(telepathy chan<- string, alienMessages []string) {
 	for _, m := range alienMessages {
 		telepathy <- m
 	}
-	close(telepathy)
+	close(telepathy) // If you miss this part go will return fatal error : all goroutines are asleep - deadlock!
 }
 
 func consumer(telepathy <-chan string, done chan<- bool) {
 	for d := range telepathy {
 		fmt.Printf("\nMessage From Alien : '%v'\n", d)
 	}
-	done <- true
+	done <- true // If you miss this part go will return fatal error : all goroutines are asleep - deadlock!
 }
 
 // ********** (Printing Results) *************//
