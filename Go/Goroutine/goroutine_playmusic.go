@@ -1,4 +1,4 @@
-// Test concurrency
+// Test concurrency 
 package main
 
 import (
@@ -7,6 +7,9 @@ import (
 	"time"
 )
 
+// Note : Keep in mind of WaitGroup (concurrent-safe conter)
+// In this example I will going to use three Methods
+// (1) wg.Add   (2)wg.Done   (3)wg.Wait
 var (
 	wg sync.WaitGroup
 )
@@ -24,16 +27,17 @@ var (
 	wave6 = "■■■■■■ 6"
 )
 
+
 func soundWave(s string) {
 	for i := 0; i < shortSong; i++ {
 		fmt.Printf("%v\n", s)
 		time.Sleep(time.Millisecond * 100)
 	}
-	wg.Done()
+	wg.Done()              // Done --> indicate to the WaitGroup that you've exited
 }
 
 func playMusic() {
-	wg.Add(1)
+	wg.Add(1)              // Add  --> indicate the 1 goroutine is begining
 	go soundWave(wave1)
 	wg.Add(1)
 	go soundWave(wave2)
@@ -49,7 +53,7 @@ func playMusic() {
 
 func main() {
 	playMusic()
-	wg.Wait()
+	wg.Wait()             // Wait  --> inidcate goroutines has exited
 }
 
 // *********** (Printing Results) *************//
