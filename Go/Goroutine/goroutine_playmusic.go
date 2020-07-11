@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// Note : Keep in mind of WaitGroup (concurrent-safe conter)
-// In this example I will going to use three Methods
+// Note : Keep in mind of WaitGroup (concurrent-safe counter)
+// In this example I'm going to use three Methods
 // (1) wg.Add   (2)wg.Done   (3)wg.Wait
 var (
 	wg sync.WaitGroup
