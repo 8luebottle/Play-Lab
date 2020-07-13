@@ -32,6 +32,7 @@ import (
 
 func main() {
 	/**************************************/
+	sectionDivider("goroutine & channel #01")
 	// goroutine & channel #01
 	// run goroutine without time.Sleep
 	// This is how goroutine communicates with "main" goroutine
@@ -68,6 +69,7 @@ func main() {
 	// , it will block until a value is sent.
 
 	/**************************************/
+	sectionDivider("goroutine & channel #02")
 	// goroutine & channel #02
 	// run goroutine without time.Sleep
 	m2 := make(map[int]string)
@@ -85,6 +87,7 @@ func main() {
 	fmt.Println(m2[2]) // Second
 
 	/**************************************/
+	sectionDivider("goroutine & channel #03 ★★★")
 	// goroutine & channel #03 ★★★
 	// range over channel without close
 	ch3 := make(chan int)
@@ -116,6 +119,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #04")
 	// close #04
 	// range over channel with close
 	ch4 := make(chan int)
@@ -138,6 +142,7 @@ func main() {
 
 	println()
 	/**************************************/
+	sectionDivider("close #05 ★★★★★★★★★")
 	// close #05 ★★★★★★★★★
 	// close shut down the channel after
 	// the last sent value is received
@@ -178,6 +183,7 @@ func main() {
 	// chan int 0
 
 	/**************************************/
+	sectionDivider("close #06 ★★★")
 	// close #06 ★★★
 	cl6 := make(chan int, 2)
 	cl6 <- 1
@@ -205,6 +211,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #07 ★★★")
 	// close #07 ★★★
 	tc07 := make(chan string, 2)
 	tc07 <- "A"
@@ -215,7 +222,7 @@ func main() {
 	   [Output]
 	   Success A
 
-	
+
 	   [Explain]
 	   Here close is mandatory
 	   because we are receiving more values than sent values
@@ -235,6 +242,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #08 ★★★")
 	// close #08 ★★★
 	tc08 := make(chan int, 2)
 	tc08 <- 1
@@ -263,6 +271,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #09 ★★★")
 	// close #09 ★★★
 	tc09 := make(chan int, 2)
 	tc09 <- 1
@@ -287,6 +296,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #10 ★★★")
 	// close #10 ★★★
 	tc10 := make(chan int, 2)
 	tc10 <- 1
@@ -322,6 +332,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #11 ★★★")
 	// close #11 ★★★
 	s11 := []int{1, 2, 3, 4, 5}
 	tc11 := make(chan int)
@@ -367,6 +378,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #12 ★★★")
 	// close #12 ★★★
 	tasks := make(chan int, 5)
 	finished := make(chan bool)
@@ -406,6 +418,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #13 ★★★")
 	// close #13 ★★★
 	traverse := func(arr []string) <-chan string {
 		ch := make(chan string)
@@ -445,6 +458,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #14 ★★★")
 	// close #14 ★★★
 	// Create a new channel with `make(chan val-type)`.
 	// Channels are typed by the values they convey.
@@ -490,6 +504,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("close #15 ★★★")
 	// close #15 ★★★
 	dc := make(chan bool)
 
@@ -512,6 +527,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("channel type #01 ★★★")
 	// channel type #01 ★★★
 	// send-only
 	rc1 := make(chan<- int)
@@ -534,6 +550,7 @@ func main() {
 	// <-rc1 (receive from send-only type chan<- int)
 
 	/**************************************/
+	sectionDivider("channel type #02 ★★★")
 	// channel type #02 ★★★
 	// receive-only
 	// Frequently used as function return type
@@ -588,6 +605,7 @@ func main() {
 	// 0 1 2
 
 	/**************************************/
+	sectionDivider("channel type #03 ★★★")
 	// channel type #03 ★★★
 	// interface
 	mt := map[string]string{
@@ -650,6 +668,7 @@ func main() {
 	*/
 
 	/**************************************/
+	sectionDivider("channel type #04 ★★★")
 	// channel type #04 ★★★
 	pkFunc := func(fns ...func()) func() {
 		return fns[rand.Intn(len(fns))]
@@ -684,6 +703,7 @@ func main() {
 	// 9,18,19,9,18,324,648,647,418609,837218,
 
 	/**************************************/
+	sectionDivider("channel type #05 ★★★")
 	// channel type #05 ★★★
 	// empty struct, more idiomatic than boolean channel
 	/*
@@ -738,3 +758,8 @@ func main() {
 	}
 	// 1, 3, 5, 7, Done!
 }
+
+func sectionDivider(title string) {
+	fmt.Printf("\n**************** %s *****************\n", title)
+}
+
