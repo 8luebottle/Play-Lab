@@ -25,7 +25,7 @@ func main() {
 	Workpool = *new(WorkThread)
 	Workpool.Todo = make(map[int]string)
 	Workpool.LastKey = 0
-	go Workpool.Start() //Start the work pool
+	go Workpool.Start() // Start the work pool
 	// Wait and add items to the workpool
 	// Wait and add items to the workpool, simulating
 	time.Sleep(3 * time.Second)
@@ -73,20 +73,20 @@ func (w *WorkThread) Newkey() int {
 	return w.LastKey
 }
 
-func (w *WorkThread) AddToQueue(Newstring string) {
+func (w *WorkThread) AddToQueue(NewString string) {
 	// Add job to the queue
 	NewKey := w.Newkey()       // First get a new key
 	w.KeyLock.Lock()           // Lock the map, make it safe to write too
 	defer w.KeyLock.Unlock()   // Unlock the map after function return
-	w.Todo[NewKey] = Newstring // Add the string with the new key to the map
+	w.Todo[NewKey] = NewString // Add the string with the new key to the map
 	fmt.Println("Job added!")
 	return
 }
 
-func (w *WorkThread) RemoveFromQue(DeletKey int) {
+func (w *WorkThread) RemoveFromQue(DeleteKey int) {
 	w.MapLock.Lock()         // Lock the map
 	defer w.MapLock.Unlock() // Call this function on return
-	delete(w.Todo, DeletKey) // Remove the job from queue
+	delete(w.Todo, DeleteKey) // Remove the job from queue
 	return
 }
 
