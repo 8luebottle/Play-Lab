@@ -92,7 +92,7 @@ func main() {
 	sectionDivider("goroutine & channel #03 ★★★")
 	// goroutine & channel #03 ★★★
 	// range over channel without close
-	ch3 := make(chan int)					  // Unbuffered Channel
+	ch3 := make(chan int)	// Unbuffered Channel
 	/*
 		Unbuffered channel needs a receiver as soon as
 		a message is emitted to the channel.
@@ -100,14 +100,14 @@ func main() {
 	n := 3
 	go func() {
 		for i := 0; i < n; i++ {
-			ch3 <- i 						 // Send
+			ch3 <- i 	// Send
 		}
 	}()
 
 	// we don't need to close
 	// since we end looping before limit
 	for i := 0; i < n; i++ {
-		print(<-ch3, ",")					// Receive
+		print(<-ch3, ",")	// Receive
 	}
 	// 0,1,
 
@@ -296,8 +296,26 @@ func main() {
 	// close #09 ★★★
 	tc09 := make(chan int, 2)
 	tc09 <- 1
-	// close(tc09)
-	// tc09 <- 2
+	tc09 <- 2
+	fmt.Println(<-tc09)     // 1
+	fmt.Println(<-tc09)     // 2
+	// fmt.Println(<-tc09)     // fatal error: all goroutines are asleep - deadlock!
+
+	/*
+		if you try to print out value more than buffer size it will cause deadlock
+		but, you can print out zero values if you close the channel.
+		see the example below
+
+			tc09 := make(chan int, 2)
+			tc09 <- 1
+			tc09 <- 2
+			fmt.Println(<-tc09)     // 1
+			fmt.Println(<-tc09)     // 2
+			close(tc09)
+			fmt.Println(<-tc09)    // 0
+	*/
+
+
 	/*
 		[Output]
 		panic: runtime error: send on closed channel
@@ -322,12 +340,14 @@ func main() {
 	tc10 := make(chan int, 2)
 	tc10 <- 1
 	tc10 <- 2
-	close(tc10)
+	close(tc10)   // you need to close channel because of the `cap(tc10)+1` part
 
 	for i := 0; i < cap(tc10)+1; i++ {
 		v, ok := <-tc10
 		fmt.Println(v, ok)
+		//close(tc10)     // Not here! channel already has been closed ==> close of closed channel
 	}
+	//close(tc10)			  // Not here! deadlock!
 
 	/*
 	   [Output]
@@ -355,22 +375,22 @@ func main() {
 	/**************************************/
 	sectionDivider("close #11 ★★★")
 	// close #11 ★★★
-	s11 := []int{1, 2, 3, 4, 5}
+	s11 := []int{11, 22, 33, 45, 55}
 	tc11 := make(chan int)
 	go func() {
-		defer close(tc11)
+		defer close(tc11)   // close tc11 channel from here
 		for _, elem := range s11 {
 			tc11 <- elem
 		}
 	}()
-	// close(tc11)
+	//close(tc11)  // if you use close here data wil not print out.
 	for elem := range tc11 {
 		fmt.Printf("%v ", elem)
 	}
 
 	/*
 		[Output]
-		1 2 3 4 5
+		11 22 33 44 55
 
 
 		[Explain]
@@ -423,8 +443,13 @@ func main() {
 	}
 	close(tasks)
 	fmt.Println("Sent ALL")
+	/*
+		After sent all the tasks,
+		than receives tasks.
+	 */
 
 	<-finished
+	fmt.Printf("finished : %#v", finished)   // (chan bool)(0xc0000a8060)
 	close(finished)
 
 	/*
