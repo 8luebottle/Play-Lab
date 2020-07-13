@@ -74,7 +74,7 @@ func (w *WorkThread) Newkey() int {
 }
 
 func (w *WorkThread) AddToQueue(Newstring string) {
-	// Add job to the qeue
+	// Add job to the queue
 	NewKey := w.Newkey()       // First get a new key
 	w.KeyLock.Lock()           // Lock the map, make it safe to write too
 	defer w.KeyLock.Unlock()   // Unlock the map after function return
