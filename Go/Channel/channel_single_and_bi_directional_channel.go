@@ -1,25 +1,25 @@
 // Reference : https://play.golang.org/p/-wMKASb1Fh
 
 /*
-goroutine, channel
+	goroutine, channel
 
-channels are to communicate with goroutines
-to synchronize with goroutines(including main function, main goroutine)
+	channels are to communicate with goroutines
+	to synchronize with goroutines(including main function, main goroutine)
 
-We Launch the goroutine in background and Move onto the next.
-We do not wait for the goroutine function to return.
-(main goroutine does not block until its return)
+	We Launch the goroutine in background and Move onto the next.
+	We do not wait for the goroutine function to return.
+	(main goroutine does not block until its return)
 
-<- ch
-Receive from ‘ch’, and Discard the sent value
-Wait until the channel ‘ch’ outputs some value
+	<- ch
+	Receive from ‘ch’, and Discard the sent value
+	Wait until the channel ‘ch’ outputs some value
 
-By default, sends and receives block until the other side is ready.
-That is, every single send will block
-until another goroutine receives from the channel.
+	By default, sends and receives block until the other side is ready.
+	That is, every single send will block
+	until another goroutine receives from the channel.
 
-This allows goroutines to synchronize without
-explicit locks or condition variables.
+	This allows goroutines to synchronize without
+	explicit locks or condition variables.
 */
 package main
 
@@ -48,25 +48,26 @@ func main() {
 	// With channel, main goroutine blocks!
 	<-ch1
 	fmt.Println(len(ch1), cap(ch1)) // 0 0
+	/*
+		The main goroutine blocks
+		until it receives a message from the shared channel.
 
-	// The main goroutine blocks
-	// until it receives a message from the shared channel.
+		We do not need time.Sleep to run goroutine
+		Wait until we retrieve from the channel ch
+		Once we receive, we discard it
+		Receivers always block until there is data to receive
+		That's why we do not proceed to the end of main
+		until we receive from channel
 
-	// We do not need time.Sleep to run goroutine
-	// Wait until we retrieve from the channel ch
-	// Once we receive, we discard it
-	// Receivers always block until there is data to receive
-	// That's why we do not proceed to the end of main
-	// until we receive from channel
+		Remember by default, channel sends and receives
+		block until the other side is ready.
+		That is, every single send will block
+		until another goroutine receives from the channel.
 
-	// Remember by default, channel sends and receives
-	// block until the other side is ready.
-	// That is, every single send will block
-	// until another goroutine receives from the channel.
-
-	// That is, once we send to channel
-	// and when the caller tries to read from the channel
-	// , it will block until a value is sent.
+		That is, once we send to channel
+		and when the caller tries to read from the channel
+		, it will block until a value is sent.
+	 */
 
 	/**************************************/
 	sectionDivider("goroutine & channel #02")
@@ -77,36 +78,47 @@ func main() {
 	ch2 := make(chan bool)
 	go func() {
 		m2[2] = "Second"
-		ch2 <- true
+		ch2 <- true       // without this will cause deadlock
 	}()
-
-	// block until a value is sent to ch2
-	// and retrieve from channel ch2
-	// without this line, the output would be "First"
-	_ = <-ch2          // or <-ch
+	/*
+		block until a value is sent to ch2
+		and retrieve from channel ch2
+		without this line, the output would be "First"
+	 */
+	 _ = <-ch2          // or <-ch
 	fmt.Println(m2[2]) // Second
 
 	/**************************************/
 	sectionDivider("goroutine & channel #03 ★★★")
 	// goroutine & channel #03 ★★★
 	// range over channel without close
-	ch3 := make(chan int)
+	ch3 := make(chan int)					  // Unbuffered Channel
+	/*
+		Unbuffered channel needs a receiver as soon as
+		a message is emitted to the channel.
+	 */
+	n := 3
 	go func() {
-		for i := 0; i < 3; i++ {
-			ch3 <- i
+		for i := 0; i < n; i++ {
+			ch3 <- i 						 // Send
 		}
 	}()
 
 	// we don't need to close
 	// since we end looping before limit
-	for i := 0; i < 2; i++ {
-		print(<-ch3, ",")
+	for i := 0; i < n; i++ {
+		print(<-ch3, ",")					// Receive
 	}
 	// 0,1,
 
 	/*
-	   Only the sender should a channel
+		if you try to get more data than in the channel(n+1),
+		it cause deadlock!
+		(try to change variable n)
+	 */
 
+	/*
+	   Only the sender should a channel
 	   Sending to a closed channel will cause a panic
 
 	   channels are not files
@@ -124,11 +136,16 @@ func main() {
 	// range over channel with close
 	ch4 := make(chan int)
 	go func() {
-		defer close(ch4)
+		defer close(ch4)			// close the ch4 channel
 		for i := 10; i < 13; i++ {
 			ch4 <- i
 		}
+		//close(ch4)				// or you can close channel here.
 	}()
+	/*
+		close(ch4) closes c4 channel,
+		the parameter must be either bidirectional or send-only channel.
+	 */
 
 	/*
 	   Note that when we traverse channels,
@@ -144,13 +161,15 @@ func main() {
 	/**************************************/
 	sectionDivider("close #05 ★★★★★★★★★")
 	// close #05 ★★★★★★★★★
-	// close shut down the channel after
-	// the last sent value is received
-	// Synchronizing with the last value
-	// can be achieved with goroutine
+	/*
+		close shut down the channel after
+		the last sent value is received
+		Synchronizing with the last value
+		can be achieved with goroutine
 
-	// Without goroutine, we need to buffer the channel
-	// Can hold 2 elements until sending blocks
+		Without goroutine, we need to buffer the channel
+		Can hold 2 elements until sending blocks
+	 */
 	qch := make(chan int, 2)
 
 	// without goroutine
@@ -165,17 +184,19 @@ func main() {
 	// qch <- 100
 	// runtime error: send on closed channel
 
-	// But receiving from closed channel is possible
+	/*
+		But receiving from closed channel is possible
+		any value received from closed channel succeeds without blocking
+		, returning the zero value for the channel element.
 
-	// any value received from closed channel succeeds without blocking
-	// , returning the zero value for the channel element.
+		If the channel is string type, [no output]
+	 */
 	println(<-qch, <-qch, <-qch, <-qch, <-qch)
-	// If the channel is string type, [no output]
 	// 10,20,0 0 0 0 0
 
 	// ★★★
 	x5, ok5 := <-qch
-	fmt.Println(x5, ok5)
+	fmt.Println("x5 :",  x5, " ok5 :", ok5)
 	// 0 false
 	// closed channel sets ok to false
 
