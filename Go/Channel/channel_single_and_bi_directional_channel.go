@@ -470,9 +470,7 @@ func main() {
 		ch := make(chan string)
 		go func() {
 			// not here
-			//close(ch)  // panic : send on closed channel
-
-			//defer close(ch) // Or this will work
+			// close(ch)
 
 			for index, value := range arr {
 				ch <- fmt.Sprintf("INDEX %d,  VALUE %s", index, value)
@@ -526,7 +524,7 @@ func main() {
 	}()
 
 	for v := range pmsg {
-		fmt.Println(v)  // parse values(v) from psgm channel
+		fmt.Println(v)
 	}
 	/*
 	   ping
@@ -585,16 +583,16 @@ func main() {
 	fmt.Println(reflect.TypeOf(rc1), len(rc1), cap(rc1))
 	// chan<- int 0 0
 
-	//<-rc1
+	// <-rc1
 	// invalid operation: <-rc1 (receive from send-only type chan<- int)
 
-	//rc1 <- 2
+	// rc1 <- 2
 	// fatal error: all goroutines are asleep - deadlock!
 	// since it is not buffered
 	// we need to use goroutine
 
-	//close(rc1)
-	//x6, ok6 := <-rc1
+	// close(rc1)
+	// x6, ok6 := <-rc1
 	// <-rc1 (receive from send-only type chan<- int)
 
 	/**************************************/
@@ -604,7 +602,7 @@ func main() {
 	// Frequently used as function return type
 	rc2 := make(<-chan int)
 	go func() {
-		//rc2 <- 1
+		// rc2 <- 1
 		// invalid operation: rc2 <- 1 (send to receive-only type <-chan int)
 	}()
 	fmt.Println(reflect.TypeOf(rc2), len(rc2), cap(rc2))
@@ -680,9 +678,7 @@ func main() {
 
 	tsl := []interface{}{1, "A", mt, lslice, p, pt}
 	for key, value := range tsl {
-		fmt.Printf("%+v: %+v (%+v) \n",
-			key, value, reflect.TypeOf(value),
-		)
+		fmt.Printf("%+v: %+v (%+v) \n", key, value, reflect.TypeOf(value))
 	}
 	/*
 	   0: 1 (int)
@@ -764,12 +760,10 @@ func main() {
 	   off of with no associated data. chan struct{} is a channel that passes
 	   no data. You could also write chan bool but that has two potential values
 	   , true or false. struct{} lets your readers know, “There’s no data
-	   being passed here.”
-
-	   The only reason for the channel to exist is to synchronize things.
-	   No other information is being sent. The arrow in front of <-chan struct{}
-	   further specifies that the caller is the one who will be in charge of
-	   the quit channel, not the function.
+	   being passed here.” The only reason for the channel to exist is to
+	   synchronize things. No other information is being sent. The arrow in
+	   front of <-chan struct{} further specifies that the caller is the one
+	   who will be in charge of the quit channel, not the function.
 	*/
 	// we can also use quit <-chan struct{}
 	oDD := func(from, to int, quit chan struct{}) <-chan int {
@@ -811,7 +805,6 @@ func main() {
 	// 1, 3, 5, 7, Done!
 }
 
-// sectionDivider divides in each sections for reader-friendly
 func sectionDivider(title string) {
 	fmt.Printf("\n**************** %s *****************\n", title)
 }
