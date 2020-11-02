@@ -30,7 +30,7 @@ func TestSum(t *testing.T)  {
 /*
     --- FAIL: TestSum (0.00s)
         --- FAIL: TestSum/collection_of_5_numbers (0.00s)
-            sum_test.go:14: got 15 wnat 16 given, [1 2 3 4 5]
+            sum_test.go:14: got 15 want 16 given, [1 2 3 4 5]
         --- FAIL: TestSum/Collection_of_any_size (0.00s)
             sum_test.go:25: got 6 want 7 given, [1 2 3]
  */
