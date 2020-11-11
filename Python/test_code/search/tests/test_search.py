@@ -1,11 +1,13 @@
 """End-to-End Test"""
 # Ref : SmartBear
 
-from ..pages.search import DuckDuckGoSearchPage
-from ..pages.result import DuckDuckGoResultPage
+from pages.search import DuckDuckGoSearchPage
+from pages.result import DuckDuckGoResultPage
+
 
 def test_basic_duckduckgo_search(browser):
-    search_page = DuckDuckGoSearchPage(browser)
+    search_page = DuckDuckGoSearchPage(browser)  # user search behavior
+
     result_page = DuckDuckGoResultPage(browser)
 
     # Given the DuckDuckGo home page is displayed
@@ -16,5 +18,5 @@ def test_basic_duckduckgo_search(browser):
     search_page.search(word)
 
     assert word in result_page.title()
-    assert word == result_page.search_input_value()
+    assert word == result_page.search_input_value()  # check a result and search input value
     assert result_page.result_count_for_phrase(word) > 0
