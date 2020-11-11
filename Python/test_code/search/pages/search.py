@@ -23,3 +23,4 @@ class DuckDuckGoSearchPage:
         """call browser find element by name q"""
 
         search_input.send_keys(phrase, + Keys.RETURN) # hits enter --> submits the search
+        

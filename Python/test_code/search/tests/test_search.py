@@ -7,6 +7,7 @@ from pages.result import DuckDuckGoResultPage
 
 def test_basic_duckduckgo_search(browser):
     search_page = DuckDuckGoSearchPage(browser)  # user search behavior
+
     result_page = DuckDuckGoResultPage(browser)
 
     # Given the DuckDuckGo home page is displayed
