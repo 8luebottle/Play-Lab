@@ -1,4 +1,4 @@
-# [date_replacer.py] Replace Date(YYY-MM-DD) as ("YYYY-MM-DD")
+# [date_replacer.py] Replace Date(YYYY-MM-DD) as ("YYYY-MM-DD")
 
 import logging
 import os
